@@ -1,0 +1,95 @@
+<script>
+    // รอให้หน้าเว็บโหลดเสร็จก่อนเริ่มทำงาน
+    document.addEventListener("DOMContentLoaded", () => {
+        const tableBody = document.getElementById("documentTableBody");
+        const loader = document.getElementById("loader");
+        const searchInput = document.getElementById("searchInput");
+        const noResults = document.getElementById("noResults");
+        let allDocuments = []; // เก็บข้อมูลทั้งหมดไว้เพื่อการค้นหา
+
+        // ฟังก์ชันสำหรับอัปเดตปีใน Footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // ฟังก์ชันสำหรับแสดง/ซ่อน loader
+        function showLoader(visible) {
+            loader.style.display = visible ? "block" : "none";
+        }
+        
+        // ฟังก์ชันสำหรับแสดง/ซ่อนข้อความ "ไม่พบข้อมูล"
+        function showNoResults(visible) {
+            noResults.style.display = visible ? "block" : "none";
+        }
+
+        // ฟังก์ชันสร้างตารางจากข้อมูล
+        function populateTable(documents) {
+            tableBody.innerHTML = ""; // เคลียร์ข้อมูลเก่า
+            
+            if (!documents || documents.length === 0) {
+              showNoResults(true);
+              return;
+            }
+            
+            showNoResults(false);
+
+            documents.forEach(doc => {
+                const row = document.createElement("tr");
+
+                // Cell for document name
+                const nameCell = document.createElement("td");
+                nameCell.textContent = doc.name;
+                row.appendChild(nameCell);
+
+                // Cell for download button
+                const linkCell = document.createElement("td");
+                const downloadLink = document.createElement("a");
+                downloadLink.href = doc.link;
+                downloadLink.target = "_blank"; // เปิดในแท็บใหม่
+                downloadLink.rel = "noopener noreferrer";
+                downloadLink.className = "download-btn";
+                downloadLink.innerHTML = `<i class="fa-solid fa-download"></i> ดาวน์โหลด`;
+                
+                linkCell.appendChild(downloadLink);
+                row.appendChild(linkCell);
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        // ฟังก์ชันจัดการเมื่อดึงข้อมูลสำเร็จ
+        function onSuccess(documents) {
+            showLoader(false);
+            if (documents.error) {
+              handleError(documents.error);
+              return;
+            }
+            allDocuments = documents;
+            populateTable(allDocuments);
+        }
+
+        // ฟังก์ชันจัดการเมื่อเกิดข้อผิดพลาด
+        function handleError(error) {
+            showLoader(false);
+            tableBody.innerHTML = `<tr><td colspan="2" style="text-align:center; color: #ff5577;">เกิดข้อผิดพลาด: ${error.message || 'ไม่สามารถโหลดข้อมูลได้'}</td></tr>`;
+            console.error(error);
+        }
+
+        // ฟังก์ชันค้นหาข้อมูล
+        function filterDocuments() {
+            const query = searchInput.value.toLowerCase();
+            const filteredDocs = allDocuments.filter(doc => {
+                return doc.name.toLowerCase().includes(query);
+            });
+            populateTable(filteredDocs);
+        }
+
+        // เพิ่ม Event Listener ให้กับช่องค้นหา
+        searchInput.addEventListener("keyup", filterDocuments);
+        
+        // เริ่มต้นกระบวนการ: เรียกฟังก์ชัน getDocuments() จากฝั่ง Server (Code.gs)
+        showLoader(true);
+        google.script.run
+            .withSuccessHandler(onSuccess)
+            .withFailureHandler(handleError)
+            .getDocuments();
+    });
+</script>

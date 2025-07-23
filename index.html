@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts: Prompt -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome (Icon Library) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Include CSS -->
+    <?!= include('styles.css'); ?>
+</head>
+<body>
+    <!-- NEW: Background Grid -->
+    <div class="grid-background"></div>
+
+    <div class="container">
+        <header>
+           <h1>ระบบดาวน์โหลดเอกสาร</h1>
+           <p>โรงพยาบาลสระโบสถ์</p>
+        </header>
+
+        <main>
+            <!-- ----- START: NEW FUTURISTIC SEARCH BAR ----- -->
+            <div class="search-container">
+              <div class="glow"></div>
+              <div class="darkBorderBg"></div>
+              <div class="darkBorderBg"></div>
+              <div class="darkBorderBg"></div>
+              <div class="white"></div>
+              <div class="border"></div>
+            
+              <div class="search-main">
+                <!-- IMPORTANT: The input still has id="searchInput" for JS compatibility -->
+                <input placeholder="ค้นหาเอกสาร..." type="text" name="text" class="input" id="searchInput" />
+                <div id="input-mask"></div>
+                <div id="pink-mask"></div>
+                <div id="search-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" height="24" fill="none" class="feather feather-search">
+                    <circle stroke="url(#search)" r="8" cy="11" cx="11"></circle>
+                    <line stroke="url(#searchl)" y2="16.65" y1="22" x2="16.65" x1="22"></line>
+                    <defs>
+                      <linearGradient gradientTransform="rotate(50)" id="search">
+                        <stop stop-color="#f8e7f8" offset="0%"></stop>
+                        <stop stop-color="#b6a9b7" offset="50%"></stop>
+                      </linearGradient>
+                      <linearGradient id="searchl">
+                        <stop stop-color="#b6a9b7" offset="0%"></stop>
+                        <stop stop-color="#837484" offset="50%"></stop>
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <!-- ----- END: NEW FUTURISTIC SEARCH BAR ----- -->
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ชื่อเอกสาร</th>
+                            <th>ดาวน์โหลด</th>
+                        </tr>
+                    </thead>
+                    <tbody id="documentTableBody">
+                    </tbody>
+                </table>
+            </div>
+            <div id="loader" class="loader-container">
+                <div class="spinner"></div>
+                <p>กำลังโหลดข้อมูล...</p>
+            </div>
+            <div id="noResults" class="no-results-message" style="display: none;">
+                <i class="fa-regular fa-file-excel"></i>
+                <p>ไม่พบเอกสารที่ตรงกับการค้นหา</p>
+            </div>
+        </main>
+        
+        <footer>
+            <p>กลุ่มงานเภสัชกรรมฯ โรงพยาบาลสระโบสถ์</p>
+            <div class="footer-contact">
+                <span><i class="fas fa-envelope"></i> pharmacistsabot@gmail.com</span>
+                <span><i class="fas fa-phone"></i> 036-776240 ต่อ 104</span>
+            </div>
+            <p class="copyright">© <span id="currentYear"></span> สงวนลิขสิทธิ์</p>
+        </footer>
+
+    </div>
+
+    <!-- Include JavaScript -->
+    <?!= include('script.js'); ?>
+</body>
+</html>
